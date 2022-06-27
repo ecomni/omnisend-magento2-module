@@ -1,5 +1,5 @@
 {
-  "name": "omnisend/omnisend",
+  "name": "omnisend/magento2-module",
   "description": "A Magento 2 module that allows your store and Omnisend account to stay connected.",
   "type": "magento2-module",
   "version": "1.2.0",

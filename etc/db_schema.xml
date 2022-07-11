@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Run after each release: (note that double dashes are not allowed in xml comments, you _can_ remove the backslash)
+bin/magento setup:db-declaration:generate-whitelist -\-module-name=Omnisend_Omnisend
+see: https://devdocs.magento.com/guides/v2.4/extension-dev-guide/declarative-schema/migration-commands.html#create-whitelist
+-->
+<schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
+    <table name="guest_subscriber_omnisend" resource="default" engine="innodb" comment="Table For Mapping Magento Guest Subscribers And Omnisend Contacts">
+        <column name="id" xsi:type="int" nullable="false" identity="true" padding="10" unsigned="true" comment="Id"/>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="id"/>
+        </constraint>
+        <column name="subscriber_id" xsi:type="int" nullable="false" padding="10" unsigned="false" comment="Subscriber Id"/>
+        <column name="omnisend_id" xsi:type="text" nullable="false" comment="Omnisend Id"/>
+        <column name="store_id" xsi:type="int" nullable="false" padding="10" unsigned="false" comment="Store Id"/>
+    </table>
+    <table name="sales_order_status_omnisend" resource="default" engine="innodb" comment="Table For Mapping Magento And Omnisend Order Statuses">
+        <column name="status" xsi:type="varchar" nullable="false" length="32" comment="Status"/>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="status"/>
+        </constraint>
+        <column name="payment_status" xsi:type="text" nullable="false" comment="Payment Status"/>
+        <column name="fulfillment_status" xsi:type="text" nullable="false" comment="Fulfillment Status"/>
+    </table>
+    <table name="omnisend_rate_limit" resource="default" engine="innodb" comment="Table For Omnisend API Rate Limit Tracking">
+        <column name="id" xsi:type="int" nullable="false" identity="true" padding="10" unsigned="true" comment="Id"/>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="id"/>
+        </constraint>
+        <column name="limit_total" xsi:type="int" nullable="false" padding="10" unsigned="false" comment="Limit Total"/>
+        <column name="limit_remaining" xsi:type="int" nullable="false" padding="10" unsigned="false" comment="Limit Remaining"/>
+        <column name="resets_in" xsi:type="int" nullable="false" padding="10" unsigned="false" comment="Resets In"/>
+        <column name="updated_at" xsi:type="timestamp" nullable="false" default="CURRENT_TIMESTAMP" on_update="true" comment="Updated At"/>
+    </table>
+    <table name="customer_omnisend" resource="default" engine="innodb" comment="Table For Mapping Magento And Omnisend Customers">
+        <column name="id" xsi:type="int" nullable="false" identity="true" padding="10" unsigned="true" comment="Id"/>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="id"/>
+        </constraint>
+        <column name="customer_id" xsi:type="int" nullable="false" padding="10" unsigned="false" comment="Customer Id"/>
+        <column name="omnisend_id" xsi:type="text" nullable="false" comment="Omnisend Id"/>
+        <column name="store_id" xsi:type="int" nullable="false" padding="10" unsigned="false" comment="Store Id"/>
+    </table>
+    <table name="omnisend_request" resource="default" engine="innodb" comment="Table For Omnisend Requests">
+        <column name="record_id" xsi:type="int" nullable="false" identity="true" padding="10" unsigned="true" comment="Record ID"/>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="record_id"/>
+        </constraint>
+        <column name="request_url" xsi:type="text" nullable="true" comment="Request URL"/>
+        <column name="request_method" xsi:type="text" nullable="true" comment="Request Method"/>
+        <column name="request_body" xsi:type="text" nullable="true" comment="Request Body"/>
+        <column name="store_id" xsi:type="int" nullable="true" padding="10" unsigned="false" comment="Store ID"/>
+        <column name="response_code" xsi:type="int" nullable="true" padding="10" unsigned="false" comment="Response Code"/>
+        <column name="response_body" xsi:type="text" nullable="true" comment="Response Body"/>
+    </table>
+</schema>

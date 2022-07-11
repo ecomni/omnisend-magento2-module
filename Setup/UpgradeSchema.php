@@ -31,10 +31,6 @@ class UpgradeSchema implements UpgradeSchemaInterface
             $this->addOmnisendSubscriberStatusAttributeToNewsletterSubscriber($setup);
         }
 
-        if (version_compare($context->getVersion(), '1.1.12') < 0) {
-            $this->createOmnisendRequestLogTable($setup);
-        }
-
         $setup->endSetup();
     }
 
@@ -87,76 +83,5 @@ class UpgradeSchema implements UpgradeSchemaInterface
                 'default' => null
             ]
         );
-    }
-
-    /**
-     * @param SchemaSetupInterface $setup
-     * @throws \Zend_Db_Exception
-     */
-    protected function createOmnisendRequestLogTable(SchemaSetupInterface $setup)
-    {
-        $tableName = $setup->getTable(OmnisendRequest::TABLE_NAME);
-
-        if ($setup->getConnection()->isTableExists($tableName) != true) {
-            $table = $setup->getConnection()
-                ->newTable($tableName)
-                ->addColumn(
-                    OmnisendRequestInterface::RECORD_ID,
-                    Table::TYPE_INTEGER,
-                    null,
-                    [
-                        'identity' => true,
-                        'unsigned' => true,
-                        'nullable' => false,
-                        'primary' => true
-                    ],
-                    'Record ID'
-                )
-                ->addColumn(
-                    OmnisendRequestInterface::REQUEST_URL,
-                    Table::TYPE_TEXT,
-                    null,
-                    ['nullable' => true],
-                    'Request URL'
-                )
-                ->addColumn(
-                    OmnisendRequestInterface::REQUEST_METHOD,
-                    Table::TYPE_TEXT,
-                    null,
-                    ['nullable' => true],
-                    'Request Method'
-                )
-                ->addColumn(
-                    OmnisendRequestInterface::REQUEST_BODY,
-                    Table::TYPE_TEXT,
-                    null,
-                    ['nullable' => true],
-                    'Request Body'
-                )
-                ->addColumn(
-                    OmnisendRequestInterface::STORE_ID,
-                    Table::TYPE_INTEGER,
-                    null,
-                    ['nullable' => true],
-                    'Store ID'
-                )
-                ->addColumn(
-                    OmnisendRequestInterface::RESPONSE_CODE,
-                    Table::TYPE_INTEGER,
-                    null,
-                    ['nullable' => true],
-                    'Response Code'
-                )
-                ->addColumn(
-                    OmnisendRequestInterface::RESPONSE_BODY,
-                    Table::TYPE_TEXT,
-                    null,
-                    ['nullable' => true],
-                    'Response Body'
-                )
-                ->setComment('Table For Omnisend Requests');
-
-            $setup->getConnection()->createTable($table);
-        }
     }
 }

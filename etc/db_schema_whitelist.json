@@ -1,0 +1,60 @@
+{
+    "guest_subscriber_omnisend": {
+        "column": {
+            "id": true,
+            "subscriber_id": true,
+            "omnisend_id": true,
+            "store_id": true
+        },
+        "constraint": {
+            "PRIMARY": true
+        }
+    },
+    "sales_order_status_omnisend": {
+        "column": {
+            "status": true,
+            "payment_status": true,
+            "fulfillment_status": true
+        },
+        "constraint": {
+            "PRIMARY": true
+        }
+    },
+    "omnisend_rate_limit": {
+        "column": {
+            "id": true,
+            "limit_total": true,
+            "limit_remaining": true,
+            "resets_in": true,
+            "updated_at": true
+        },
+        "constraint": {
+            "PRIMARY": true
+        }
+    },
+    "customer_omnisend": {
+        "column": {
+            "id": true,
+            "customer_id": true,
+            "omnisend_id": true,
+            "store_id": true
+        },
+        "constraint": {
+            "PRIMARY": true
+        }
+    },
+    "omnisend_request": {
+        "column": {
+            "record_id": true,
+            "request_url": true,
+            "request_method": true,
+            "request_body": true,
+            "store_id": true,
+            "response_code": true,
+            "response_body": true
+        },
+        "constraint": {
+            "PRIMARY": true
+        }
+    }
+}

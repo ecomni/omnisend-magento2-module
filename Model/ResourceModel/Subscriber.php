@@ -33,7 +33,7 @@ class Subscriber extends AbstractDb
         $this->getConnection()->update(
             $this->getMainTable(),
             [InstallData::IS_IMPORTED => $isImported],
-            self::SUBSCRIBER_ID . ' = ' . $subscriberId
+            [self::SUBSCRIBER_ID . ' = ?' => $subscriberId]
         );
     }
 
@@ -46,7 +46,7 @@ class Subscriber extends AbstractDb
         return $this->getConnection()->update(
             $this->getMainTable(),
             [InstallData::IS_IMPORTED => InstallData::DEFAULT_IS_IMPORTED_VALUE],
-            InstallData::IS_IMPORTED . ' = ' . InstallData::IMPORTED_ATTRIBUTE_VALUE
+            [InstallData::IS_IMPORTED . ' = ?' => InstallData::IMPORTED_ATTRIBUTE_VALUE]
         );
     }
 
@@ -61,7 +61,7 @@ class Subscriber extends AbstractDb
         return $this->getConnection()->update(
             $this->getMainTable(),
             [self::OMNISEND_PREVIOUS_SUBSCRIBER_STATUS => $status],
-            self::SUBSCRIBER_ID . ' = ' . $subscriberId
+            [self::SUBSCRIBER_ID . ' = ?' => $subscriberId]
         );
     }
 

@@ -44,7 +44,7 @@ class Quote extends AbstractDb
         $this->getConnection()->update(
             $this->getMainTable(),
             [UpgradeSchema::OMNISEND_POST_STATUS => $postStatus],
-            self::KEY_ENTITY_ID . ' = ' . $quoteId
+            [self::KEY_ENTITY_ID . ' = ?' => $quoteId]
         );
     }
 
@@ -57,7 +57,7 @@ class Quote extends AbstractDb
         return $this->getConnection()->update(
             $this->getMainTable(),
             [InstallData::IS_IMPORTED => InstallData::DEFAULT_IS_IMPORTED_VALUE],
-            InstallData::IS_IMPORTED . ' = ' . InstallData::IMPORTED_ATTRIBUTE_VALUE
+            [InstallData::IS_IMPORTED . ' = ?' => InstallData::IMPORTED_ATTRIBUTE_VALUE]
         );
     }
 
@@ -70,7 +70,7 @@ class Quote extends AbstractDb
         return $this->getConnection()->update(
             $this->getMainTable(),
             [InstallData::IS_IMPORTED => InstallData::IMPORTED_ATTRIBUTE_VALUE],
-            InstallData::IS_IMPORTED . ' = ' . InstallData::DEFAULT_IS_IMPORTED_VALUE
+            [InstallData::IS_IMPORTED . ' = ?' => InstallData::DEFAULT_IS_IMPORTED_VALUE]
         );
     }
 }

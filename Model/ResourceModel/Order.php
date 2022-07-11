@@ -30,7 +30,7 @@ class Order extends AbstractDb
         $this->getConnection()->update(
             $this->getMainTable(),
             [InstallData::IS_IMPORTED => $isImported],
-            OrderInterface::ENTITY_ID . ' = ' . $orderId
+            [OrderInterface::ENTITY_ID . ' = ?' => $orderId]
         );
     }
 
@@ -43,7 +43,7 @@ class Order extends AbstractDb
         return $this->getConnection()->update(
             $this->getMainTable(),
             [InstallData::IS_IMPORTED => InstallData::DEFAULT_IS_IMPORTED_VALUE],
-            InstallData::IS_IMPORTED . ' = ' . InstallData::IMPORTED_ATTRIBUTE_VALUE
+            [InstallData::IS_IMPORTED . ' = ?' => InstallData::IMPORTED_ATTRIBUTE_VALUE],
         );
     }
 
@@ -57,7 +57,7 @@ class Order extends AbstractDb
         $this->getConnection()->update(
             $this->getMainTable(),
             [UpgradeSchema::OMNISEND_POST_STATUS => $postStatus],
-            OrderInterface::ENTITY_ID . ' = ' . $orderId
+            [OrderInterface::ENTITY_ID . ' = ?' => $orderId]
         );
     }
 }

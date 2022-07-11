@@ -128,7 +128,7 @@ class Category extends AbstractDb
         return $this->getConnection()->update(
             $this->getTable(self::TABLE_CATALOG_CATEGORY_ENTITY_INT),
             [self::VALUE => InstallData::DEFAULT_IS_IMPORTED_VALUE],
-            self::ATTRIBUTE_ID . ' = ' . $isImportedAttributeId . ' AND ' .
+            [self::ATTRIBUTE_ID . ' = ' . $isImportedAttributeId . ' AND ' .
             self::VALUE . ' = ' . InstallData::IMPORTED_ATTRIBUTE_VALUE
         );
     }

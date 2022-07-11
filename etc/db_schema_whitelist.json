@@ -51,7 +51,8 @@
             "request_body": true,
             "store_id": true,
             "response_code": true,
-            "response_body": true
+            "response_body": true,
+            "created_at": true
         },
         "constraint": {
             "PRIMARY": true

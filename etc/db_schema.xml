@@ -52,5 +52,6 @@ see: https://devdocs.magento.com/guides/v2.4/extension-dev-guide/declarative-sch
         <column name="store_id" xsi:type="int" nullable="true" padding="10" unsigned="false" comment="Store ID"/>
         <column name="response_code" xsi:type="int" nullable="true" padding="10" unsigned="false" comment="Response Code"/>
         <column name="response_body" xsi:type="text" nullable="true" comment="Response Body"/>
+        <column name="created_at" xsi:type="timestamp" on_update="false" nullable="false" default="CURRENT_TIMESTAMP"/>
     </table>
 </schema>

@@ -135,9 +135,9 @@ class Order extends AbstractBodyBuilder implements RequestBodyBuilderInterface
             $shippingAddressData = $shippingAddressBuilder->build($shippingAddress);
         }
 
-        $this->addData(self::ORDER_ID, $orderId);
+        $this->addData(self::ORDER_ID, (string)$orderId);
         $this->addData(self::EMAIL, $order->getCustomerEmail());
-        $this->addData(self::CART_ID, $order->getQuoteId());
+        $this->addData(self::CART_ID, (string)$order->getQuoteId());
         $this->addData(self::CURRENCY, $order->getGlobalCurrencyCode());
         $this->addData(self::ORDER_SUM, $this->priceHelper->getPriceInCents($order->getGrandTotal()));
         $this->addData(self::DISCOUNT_SUM, $this->priceHelper->getPriceInCents(abs($order->getDiscountAmount())));

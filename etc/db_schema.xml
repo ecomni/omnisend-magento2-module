@@ -11,25 +11,31 @@ see: https://devdocs.magento.com/guides/v2.4/extension-dev-guide/declarative-sch
             <column name="id"/>
         </constraint>
         <column name="subscriber_id" xsi:type="int" nullable="false" padding="10" unsigned="false" comment="Subscriber Id"/>
-        <column name="omnisend_id" xsi:type="text" nullable="false" comment="Omnisend Id"/>
-        <column name="store_id" xsi:type="int" nullable="false" padding="10" unsigned="false" comment="Store Id"/>
+        <column name="omnisend_id" xsi:type="varchar" length="32" nullable="false" comment="Omnisend Id"/>
+        <column name="store_id" xsi:type="smallint" nullable="false" padding="10" unsigned="false" comment="Store Id"/>
+        <index referenceId="GUEST_SUBSCRIBER_OMNISEND_SUBSCRIBER_ID" indexType="btree">
+            <column name="subscriber_id"/>
+        </index>
+        <index referenceId="GUEST_SUBSCRIBER_OMNISEND_OMNISEND_ID" indexType="btree">
+            <column name="omnisend_id"/>
+        </index>
     </table>
     <table name="sales_order_status_omnisend" resource="default" engine="innodb" comment="Table For Mapping Magento And Omnisend Order Statuses">
         <column name="status" xsi:type="varchar" nullable="false" length="32" comment="Status"/>
         <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="status"/>
         </constraint>
-        <column name="payment_status" xsi:type="text" nullable="false" comment="Payment Status"/>
-        <column name="fulfillment_status" xsi:type="text" nullable="false" comment="Fulfillment Status"/>
+        <column name="payment_status" xsi:type="varchar" length="32" nullable="false" comment="Payment Status"/>
+        <column name="fulfillment_status" xsi:type="varchar" length="32" nullable="false" comment="Fulfillment Status"/>
     </table>
     <table name="omnisend_rate_limit" resource="default" engine="innodb" comment="Table For Omnisend API Rate Limit Tracking">
         <column name="id" xsi:type="int" nullable="false" identity="true" padding="10" unsigned="true" comment="Id"/>
         <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="id"/>
         </constraint>
-        <column name="limit_total" xsi:type="int" nullable="false" padding="10" unsigned="false" comment="Limit Total"/>
-        <column name="limit_remaining" xsi:type="int" nullable="false" padding="10" unsigned="false" comment="Limit Remaining"/>
-        <column name="resets_in" xsi:type="int" nullable="false" padding="10" unsigned="false" comment="Resets In"/>
+        <column name="limit_total" xsi:type="smallint" nullable="false" padding="10" unsigned="false" comment="Limit Total"/>
+        <column name="limit_remaining" xsi:type="smallint" nullable="false" padding="10" unsigned="false" comment="Limit Remaining"/>
+        <column name="resets_in" xsi:type="smallint" nullable="false" padding="10" unsigned="false" comment="Resets In"/>
         <column name="updated_at" xsi:type="timestamp" nullable="false" default="CURRENT_TIMESTAMP" on_update="true" comment="Updated At"/>
     </table>
     <table name="customer_omnisend" resource="default" engine="innodb" comment="Table For Mapping Magento And Omnisend Customers">
@@ -38,20 +44,36 @@ see: https://devdocs.magento.com/guides/v2.4/extension-dev-guide/declarative-sch
             <column name="id"/>
         </constraint>
         <column name="customer_id" xsi:type="int" nullable="false" padding="10" unsigned="false" comment="Customer Id"/>
-        <column name="omnisend_id" xsi:type="text" nullable="false" comment="Omnisend Id"/>
-        <column name="store_id" xsi:type="int" nullable="false" padding="10" unsigned="false" comment="Store Id"/>
+        <column name="omnisend_id" xsi:type="varchar" length="32" nullable="false" comment="Omnisend Id"/>
+        <column name="store_id" xsi:type="smallint" nullable="false" padding="10" unsigned="false" comment="Store Id"/>
+        <index referenceId="CUSTOMER_OMNISEND_CUSTOMER_ID" indexType="btree">
+            <column name="customer_id"/>
+        </index>
+        <index referenceId="CUSTOMER_OMNISEND_OMNISEND_ID" indexType="btree">
+            <column name="omnisend_id"/>
+        </index>
     </table>
     <table name="omnisend_request" resource="default" engine="innodb" comment="Table For Omnisend Requests">
         <column name="record_id" xsi:type="int" nullable="false" identity="true" padding="10" unsigned="true" comment="Record ID"/>
         <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="record_id"/>
         </constraint>
-        <column name="request_url" xsi:type="text" nullable="true" comment="Request URL"/>
-        <column name="request_method" xsi:type="text" nullable="true" comment="Request Method"/>
+        <column name="request_url" xsi:type="varchar" length="255" nullable="true" comment="Request URL"/>
+        <column name="request_method" xsi:type="varchar" length="16" nullable="true" comment="Request Method"/>
         <column name="request_body" xsi:type="text" nullable="true" comment="Request Body"/>
-        <column name="store_id" xsi:type="int" nullable="true" padding="10" unsigned="false" comment="Store ID"/>
-        <column name="response_code" xsi:type="int" nullable="true" padding="10" unsigned="false" comment="Response Code"/>
+        <column name="store_id" xsi:type="smallint" nullable="true" padding="10" unsigned="false" comment="Store ID"/>
+        <column name="response_code" xsi:type="smallint" nullable="true" padding="10" unsigned="false" comment="Response Code"/>
         <column name="response_body" xsi:type="text" nullable="true" comment="Response Body"/>
         <column name="created_at" xsi:type="timestamp" on_update="false" nullable="false" default="CURRENT_TIMESTAMP"/>
+        <index referenceId="OMNISEND_REQUEST_CREATED_AT" indexType="btree">
+            <column name="created_at"/>
+        </index>
+    </table>
+    <table name="sales_order">
+        <column name="is_imported" xsi:type="tinyint" nullable="false" default="0" comment="Is sent to omnisend"/>
+        <index referenceId="SALES_ORDER_OMNISEND_IS_IMPORTED" indexType="btree">
+            <column name="is_imported"/>
+            <column name="store_id"/>
+        </index>
     </table>
 </schema>

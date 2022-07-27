@@ -221,23 +221,7 @@ class InstallData implements InstallDataInterface
      */
     protected function addAttributeToOrder(ModuleDataSetupInterface $setup)
     {
-        $salesSetup = $this->salesSetupFactory->create(['setup' => $setup]);
-
-        if ($salesSetup->getAttribute(Order::ENTITY, self::IS_IMPORTED)) {
-            return;
-        }
-
-        $salesSetup->addAttribute(Order::ENTITY, self::IS_IMPORTED, [
-            'type' => 'int',
-            'label' => self::IS_IMPORTED_LABEL,
-            'input' => 'boolean',
-            'required' => false,
-            'default' => '0',
-            'global'   => ScopedAttributeInterface::SCOPE_STORE,
-            'visible' => true,
-            'user_defined' => true,
-            'system' => 0
-        ]);
+        // Moved to db_schema.xml
     }
 
     /**

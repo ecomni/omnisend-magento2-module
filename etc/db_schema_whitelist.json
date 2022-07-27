@@ -8,6 +8,10 @@
         },
         "constraint": {
             "PRIMARY": true
+        },
+        "index": {
+            "GUEST_SUBSCRIBER_OMNISEND_SUBSCRIBER_ID": true,
+            "GUEST_SUBSCRIBER_OMNISEND_OMNISEND_ID": true
         }
     },
     "sales_order_status_omnisend": {
@@ -41,6 +45,10 @@
         },
         "constraint": {
             "PRIMARY": true
+        },
+        "index": {
+            "CUSTOMER_OMNISEND_CUSTOMER_ID": true,
+            "CUSTOMER_OMNISEND_OMNISEND_ID": true
         }
     },
     "omnisend_request": {
@@ -56,6 +64,17 @@
         },
         "constraint": {
             "PRIMARY": true
+        },
+        "index": {
+            "OMNISEND_REQUEST_CREATED_AT": true
+        }
+    },
+    "sales_order": {
+        "column": {
+            "is_imported": true
+        },
+        "index": {
+            "SALES_ORDER_IS_IMPORTED_STORE_ID": true
         }
     }
 }

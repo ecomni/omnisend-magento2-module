@@ -75,7 +75,7 @@ class Quote implements EntityInterface
     /**
      * {@inheritDoc}
      */
-    public function getEntityInStoreByImportStatusSearchCriteria($isImported, $storeId)
+    public function getEntityInStoreByImportStatusSearchCriteria($isImported, $storeId): SearchCriteriaBuilder
     {
         $customerEmailFilter = $this->filterBuilder
             ->create()
@@ -121,20 +121,16 @@ class Quote implements EntityInterface
             ->create()
             ->setData('filters', [$fromDateFilter]);
 
-
-        $searchCriteria = $this->searchCriteriaBuilder
-            ->create()
+        $searchCriteriaBuilder = $this->searchCriteriaBuilder
             ->setFilterGroups([
                 $customerEmailFilterGroup,
                 $isImportedFilterGroup,
                 $storeFilterGroup,
-
                 $fromDateFilterGroup
-
             ]);
 
-        $searchCriteria->setPageSize($this->generalConfig->getMaximumEntitiesPerCron());
+        $searchCriteriaBuilder->setPageSize($this->generalConfig->getMaximumEntitiesPerCron());
 
-        return $searchCriteria;
+        return $searchCriteriaBuilder;
     }
 }

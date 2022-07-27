@@ -2,6 +2,7 @@
 
 namespace Omnisend\Omnisend\Cron;
 
+use Magento\Framework\Api\SortOrderBuilder;
 use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Api\OrderRepositoryInterface;
 use Magento\Store\Model\StoreManagerInterface;
@@ -14,6 +15,11 @@ use Omnisend\Omnisend\Model\ResponseRateManagerInterface;
 
 class UpdateOrders
 {
+    /**
+     * @var SortOrderBuilder
+     */
+    protected $sortOrderBuilder;
+
     /**
      * @var OrderRepositoryInterface
      */
@@ -54,16 +60,6 @@ class UpdateOrders
      */
     private $importStatus;
 
-    /**
-     * @param OrderRepositoryInterface $orderRepository
-     * @param GeneralConfig $generalConfig
-     * @param StoreManagerInterface $storeManager
-     * @param EntitySearchCriteriaInterface $entitySearchCriteria
-     * @param ResponseRateManagerInterface $responseRateManager
-     * @param OrderDataSender $orderDataSender
-     * @param AttributeUpdaterInterface $orderAttributeUpdater
-     * @param ImportStatus $importStatus
-     */
     public function __construct(
         OrderRepositoryInterface $orderRepository,
         GeneralConfig $generalConfig,
@@ -72,7 +68,8 @@ class UpdateOrders
         ResponseRateManagerInterface $responseRateManager,
         OrderDataSender $orderDataSender,
         AttributeUpdaterInterface $orderAttributeUpdater,
-        ImportStatus $importStatus
+        ImportStatus $importStatus,
+        SortOrderBuilder $sortOrderBuilder
     ) {
         $this->orderRepository = $orderRepository;
         $this->generalConfig = $generalConfig;
@@ -82,6 +79,7 @@ class UpdateOrders
         $this->orderDataSender = $orderDataSender;
         $this->orderAttributeUpdater = $orderAttributeUpdater;
         $this->importStatus = $importStatus;
+        $this->sortOrderBuilder = $sortOrderBuilder;
     }
 
     public function execute()
@@ -99,7 +97,7 @@ class UpdateOrders
             $searchCriteria = $this->entitySearchCriteria->getEntityInStoreByImportStatusSearchCriteria(
                 $isImported,
                 $storeId
-            );
+            )->create();
 
             $orders = $this->orderRepository
                 ->getList($searchCriteria)

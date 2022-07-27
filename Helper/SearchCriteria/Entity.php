@@ -12,75 +12,44 @@ use Omnisend\Omnisend\Setup\InstallData;
 class Entity implements EntityInterface
 {
     /**
-     * @var FilterBuilder
-     */
-    protected $filterBuilder;
-
-    /**
-     * @var FilterGroupBuilder
-     */
-    protected $filterGroupBuilder;
-
-    /**
      * @var SearchCriteriaBuilder
      */
     protected $searchCriteriaBuilder;
+
+    /**
+     * @var \Magento\Framework\Api\SortOrderBuilder
+     */
+    protected $sortOrderBuilder;
 
     /**
      * @var GeneralConfig
      */
     private $generalConfig;
 
-    /**
-     * SearchCriteriaBuilderHelper constructor.
-     * @param FilterBuilder $filterBuilder
-     * @param FilterGroupBuilder $filterGroupBuilder
-     * @param SearchCriteriaBuilder $searchCriteriaBuilder
-     * @param GeneralConfig $generalConfig
-     */
     public function __construct(
-        FilterBuilder $filterBuilder,
-        FilterGroupBuilder $filterGroupBuilder,
         SearchCriteriaBuilder $searchCriteriaBuilder,
-        GeneralConfig $generalConfig
+        GeneralConfig $generalConfig,
+        \Magento\Framework\Api\SortOrderBuilder $sortOrderBuilder
     ) {
-        $this->filterBuilder = $filterBuilder;
-        $this->filterGroupBuilder = $filterGroupBuilder;
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
         $this->generalConfig = $generalConfig;
+        $this->sortOrderBuilder = $sortOrderBuilder;
     }
 
     /**
      * {@inheritDoc}
      */
-    public function getEntityInStoreByImportStatusSearchCriteria($isImported, $storeId)
+    public function getEntityInStoreByImportStatusSearchCriteria($isImported, $storeId): SearchCriteriaBuilder
     {
-        $isImportedFilter = $this->filterBuilder
-            ->create()
-            ->setField(InstallData::IS_IMPORTED)
-            ->setConditionType('eq')
-            ->setValue($isImported);
-
-        $storeFilter = $this->filterBuilder
-            ->create()
-            ->setField(CustomerInterface::STORE_ID)
-            ->setConditionType('eq')
-            ->setValue($storeId);
-
-        $isImportedFilterGroup = $this->filterGroupBuilder
-            ->create()
-            ->setData('filters', [$isImportedFilter]);
-
-        $storeFilterGroup = $this->filterGroupBuilder
-            ->create()
-            ->setData('filters', [$storeFilter]);
-
-        $searchCriteria = $this->searchCriteriaBuilder
-            ->create()
-            ->setFilterGroups([$isImportedFilterGroup, $storeFilterGroup]);
-
-        $searchCriteria->setPageSize($this->generalConfig->getMaximumEntitiesPerCron());
-
-        return $searchCriteria;
+        return $this->searchCriteriaBuilder
+            ->addFilter(InstallData::IS_IMPORTED, 'eq', $isImported)
+            ->addFilter('store_id', 'eq', $storeId)
+            ->addSortOrder(
+                $this->sortOrderBuilder
+                    ->setField('entity_id')
+                    ->setDescendingDirection()
+                    ->create()
+            )
+            ->setPageSize($this->generalConfig->getMaximumEntitiesPerCron());
     }
 }

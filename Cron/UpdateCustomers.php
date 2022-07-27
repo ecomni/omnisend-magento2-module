@@ -113,7 +113,7 @@ class UpdateCustomers
             $searchCriteria = $this->entitySearchCriteria->getEntityInStoreByImportStatusSearchCriteria(
                 $isImported,
                 $storeId
-            );
+            )->create();
 
             $customers = $this->customerRepository
                 ->getList($searchCriteria)

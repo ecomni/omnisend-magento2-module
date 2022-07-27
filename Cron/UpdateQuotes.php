@@ -99,7 +99,7 @@ class UpdateQuotes
             $searchCriteria = $this->quoteSearchCriteria->getEntityInStoreByImportStatusSearchCriteria(
                 $isImported,
                 $storeId
-            );
+            )->create();
 
             $quotes = $this->quoteRepository
                 ->getList($searchCriteria)

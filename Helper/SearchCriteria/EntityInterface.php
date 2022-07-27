@@ -2,14 +2,14 @@
 
 namespace Omnisend\Omnisend\Helper\SearchCriteria;
 
-use Magento\Framework\Api\SearchCriteria;
+use Magento\Framework\Api\SearchCriteriaBuilder;
 
 interface EntityInterface
 {
     /**
      * @param $isImported
      * @param $storeId
-     * @return SearchCriteria
+     * @return SearchCriteriaBuilder
      */
-    public function getEntityInStoreByImportStatusSearchCriteria($isImported, $storeId);
+    public function getEntityInStoreByImportStatusSearchCriteria($isImported, $storeId): SearchCriteriaBuilder;
 }

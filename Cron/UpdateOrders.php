@@ -118,12 +118,12 @@ class UpdateOrders
                 }
                 return;
             }
-        }
 
-        if ($schedule && !empty($orders)) {
-            $schedule->setMessages(
-                $schedule->getMessages() . sprintf('- Updated %d', count($orders)) . "\n"
-            );
+            if ($schedule && !empty($orders)) {
+                $schedule->setMessages(
+                    $schedule->getMessages() . sprintf('- Updated %d', count($orders)) . "\n"
+                );
+            }
         }
     }
 

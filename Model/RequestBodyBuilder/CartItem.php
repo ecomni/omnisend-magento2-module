@@ -95,7 +95,7 @@ class CartItem extends AbstractBodyBuilder implements RequestBodyBuilderInterfac
 
         $discountAmount = $cartItem->getDiscountAmount();
         $qty = (int) $cartItem->getQty();
-        $singleItemDiscount = $discountAmount / $qty;
+        $singleItemDiscount = $discountAmount / ($qty > 0 ? $qty : 1);
         $finalPrice = $cartItem->getPriceInclTax() - round($singleItemDiscount, 2);
 
         $this->addData(self::CART_PRODUCT_ID, strval($cartItem->getItemId()));

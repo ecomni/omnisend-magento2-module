@@ -106,7 +106,7 @@ class OrderItem extends AbstractBodyBuilder implements RequestBodyBuilderInterfa
         $product = $this->productRepository->getById($orderItem->getProductId(), false, $orderItem->getStoreId());
         $discountAmount = $orderItem->getDiscountAmount();
         $qty = (int) $orderItem->getQtyOrdered();
-        $singleItemDiscount = $discountAmount / $qty;
+        $singleItemDiscount = $discountAmount / ($qty > 0 ? $qty : 1);
         $finalPrice = $orderItem->getPriceInclTax() - round($singleItemDiscount, 2);
 
         $this->addData(self::SKU, $orderItem->getSku());

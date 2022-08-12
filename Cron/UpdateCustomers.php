@@ -115,14 +115,14 @@ class UpdateCustomers
                 $storeId
             )->create();
 
-            $customers = $this->customerRepository
-                ->getList($searchCriteria)
-                ->getItems();
+            $searchResults = $this->customerRepository
+                ->getList($searchCriteria);
+            $customers = $searchResults->getItems();
 
             if ($schedule) {
                 $schedule->setMessages(
                     $schedule->getMessages()
-                    . sprintf('- Found %d customers for store %d', count($customers), $store->getId())
+                    . sprintf('- Found %d customers for store %d', $searchResults->getTotalCount(), $store->getId())
                     . "\n"
                 );
             }
@@ -135,7 +135,9 @@ class UpdateCustomers
             }
 
             if ($schedule && !empty($customers)) {
-                $schedule->setMessages($schedule->getMessages() . '- Done' . "\n");
+                $schedule->setMessages(
+                    $schedule->getMessages() . sprintf('- Updated %d', count($customers)) . "\n"
+                );
             }
         }
     }

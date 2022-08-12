@@ -108,7 +108,7 @@ class UpdateGuestSubscribers
             if ($schedule) {
                 $schedule->setMessages(
                     $schedule->getMessages()
-                    . sprintf('- Found %d subscribers for store %d', count($subscribers), $storeId)
+                    . sprintf('- Found %d subscribers for store %d', $collection->getSize(), $storeId)
                     . "\n"
                 );
             }
@@ -121,7 +121,9 @@ class UpdateGuestSubscribers
             }
 
             if ($schedule && !empty($subscribers)) {
-                $schedule->setMessages($schedule->getMessages() . '- Done' . "\n");
+                $schedule->setMessages(
+                    $schedule->getMessages() . sprintf('- Updated %d', count($subscribers)) . "\n"
+                );
             }
         }
     }

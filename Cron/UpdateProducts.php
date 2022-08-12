@@ -114,7 +114,7 @@ class UpdateProducts
             if ($schedule) {
                 $schedule->setMessages(
                     $schedule->getMessages()
-                    . sprintf('- Found %d products for store %d', count($products), $storeId)
+                    . sprintf('- Found %d products for store %d', $collection->getSize(), $storeId)
                     . "\n"
                 );
             }
@@ -127,7 +127,9 @@ class UpdateProducts
             }
 
             if ($schedule && !empty($products)) {
-                $schedule->setMessages($schedule->getMessages() . '- Done' . "\n");
+                $schedule->setMessages(
+                    $schedule->getMessages() . sprintf('- Updated %d', count($products)) . "\n"
+                );
             }
         }
     }

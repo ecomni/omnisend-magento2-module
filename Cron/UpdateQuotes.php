@@ -101,14 +101,14 @@ class UpdateQuotes
                 $storeId
             )->create();
 
-            $quotes = $this->quoteRepository
-                ->getList($searchCriteria)
-                ->getItems();
+            $searchResults = $this->quoteRepository
+                ->getList($searchCriteria);
+            $quotes = $searchResults->getItems();
 
             if ($schedule) {
                 $schedule->setMessages(
                     $schedule->getMessages()
-                    . sprintf('- Found %d quotes for store %d', count($quotes), $storeId)
+                    . sprintf('- Found %d quotes for store %d', $searchResults->getTotalCount(), $storeId)
                     . "\n"
                 );
             }
@@ -121,7 +121,9 @@ class UpdateQuotes
             }
 
             if ($schedule && !empty($quotes)) {
-                $schedule->setMessages($schedule->getMessages() . '- Done' . "\n");
+                $schedule->setMessages(
+                    $schedule->getMessages() . sprintf('- Updated %d', count($quotes)) . "\n"
+                );
             }
         }
     }

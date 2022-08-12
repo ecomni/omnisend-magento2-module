@@ -99,14 +99,15 @@ class UpdateOrders
                 $storeId
             )->create();
 
-            $orders = $this->orderRepository
-                ->getList($searchCriteria)
-                ->getItems();
+
+            $searchResults = $this->orderRepository
+                ->getList($searchCriteria);
+            $orders = $searchResults->getItems();
 
             if ($schedule) {
                 $schedule->setMessages(
                     $schedule->getMessages()
-                    . sprintf('- Found %d orders for store %d', count($orders), $store->getId())
+                    . sprintf('- Found %d orders for store %d', $searchResults->getTotalCount(), $store->getId())
                     . "\n"
                 );
             }
@@ -120,7 +121,9 @@ class UpdateOrders
         }
 
         if ($schedule && !empty($orders)) {
-            $schedule->setMessages($schedule->getMessages() . '- Done' . "\n");
+            $schedule->setMessages(
+                $schedule->getMessages() . sprintf('- Updated %d', count($orders)) . "\n"
+            );
         }
     }
 

@@ -128,7 +128,7 @@ class UpdateCategories
             if ($schedule) {
                 $schedule->setMessages(
                     $schedule->getMessages()
-                    . sprintf('- Found %d categories for store %d', count($categories), $storeId)
+                    . sprintf('- Found %d categories for store %d', $collection->getSize(), $storeId)
                     . "\n"
                 );
             }
@@ -141,7 +141,9 @@ class UpdateCategories
             }
 
             if ($schedule && !empty($categories)) {
-                $schedule->setMessages($schedule->getMessages() . '- Done' . "\n");
+                $schedule->setMessages(
+                    $schedule->getMessages() . sprintf('- Updated %d', count($categories)) . "\n"
+                );
             }
         }
     }

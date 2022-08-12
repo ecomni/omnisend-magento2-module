@@ -134,4 +134,14 @@ class OmnisendRequest extends AbstractModel implements OmnisendRequestInterface
     {
         return $this->setData(self::RESPONSE_BODY, $body);
     }
+
+    /**
+     * @inheritDoc
+     */
+    public function getCreatedAt(): ?string
+    {
+        return $this->getData(self::CREATED_AT)
+            ? (string)$this->getData(self::CREATED_AT)
+            : null;
+    }
 }

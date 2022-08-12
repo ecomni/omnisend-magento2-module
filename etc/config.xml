@@ -10,6 +10,7 @@
                 <omnisend_url>https://app.omnisend.com</omnisend_url>
                 <instructions_url>https://support.omnisend.com/8-integrations/connecting-magento-2-store-to-omnisend-account</instructions_url>
                 <is_verified>0</is_verified>
+                <request_log_cleanup_days>90</request_log_cleanup_days>
             </general>
         </omnisend_config>
         <update_quotes>

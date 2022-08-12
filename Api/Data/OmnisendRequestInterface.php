@@ -12,6 +12,7 @@ interface OmnisendRequestInterface
     const STORE_ID = 'store_id';
     const RESPONSE_CODE = 'response_code';
     const RESPONSE_BODY = 'response_body';
+    const CREATED_AT = 'created_at';
 
     /**
      * Get entity_id
@@ -103,4 +104,10 @@ interface OmnisendRequestInterface
      * @return \Omnisend\Omnisend\Api\Data\OmnisendRequestInterface
      */
     public function setResponseBody($body);
+
+    /**
+     * Get created at
+     * @return string|null
+     */
+    public function getCreatedAt(): ?string;
 }

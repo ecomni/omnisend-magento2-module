@@ -19,5 +19,8 @@
         <job name="update_guest_subscribers" instance="Omnisend\Omnisend\Cron\UpdateGuestSubscribers" method="execute">
             <config_path>update_guest_subscribers/cron/expr</config_path>
         </job>
+        <job name="omnisend_clean_request_log" instance="Omnisend\Omnisend\Cron\CleanRequestLog" method="execute">
+            <schedule>3 12 * * *</schedule>
+        </job>
     </group>
 </config>

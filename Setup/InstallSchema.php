@@ -24,7 +24,6 @@ class InstallSchema implements InstallSchemaInterface
         $setup->startSetup();
 
         $this->addAttributeToQuote($setup);
-        $this->addAttributeToNewsletterSubscriber($setup);
 
         $setup->endSetup();
     }
@@ -40,23 +39,6 @@ class InstallSchema implements InstallSchemaInterface
             [
                 'type' => Table::TYPE_INTEGER,
                 'comment' => 'Is Imported',
-                'required' => false,
-                'default' => '0'
-            ]
-        );
-    }
-
-    /**
-     * @param SchemaSetupInterface $setup
-     */
-    private function addAttributeToNewsletterSubscriber(SchemaSetupInterface $setup)
-    {
-        $setup->getConnection()->addColumn(
-            $setup->getTable('newsletter_subscriber'),
-            InstallData::IS_IMPORTED,
-            [
-                'type' => Table::TYPE_INTEGER,
-                'comment' => InstallData::IS_IMPORTED,
                 'required' => false,
                 'default' => '0'
             ]

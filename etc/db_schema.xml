@@ -70,8 +70,15 @@ see: https://devdocs.magento.com/guides/v2.4/extension-dev-guide/declarative-sch
         </index>
     </table>
     <table name="sales_order">
-        <column name="is_imported" xsi:type="tinyint" nullable="false" default="0" comment="Is sent to omnisend"/>
+        <column name="is_imported" xsi:type="tinyint" nullable="false" default="0" comment="Is sent to Omnisend"/>
         <index referenceId="SALES_ORDER_OMNISEND_IS_IMPORTED" indexType="btree">
+            <column name="is_imported"/>
+            <column name="store_id"/>
+        </index>
+    </table>
+    <table name="newsletter_subscriber">
+        <column name="is_imported" xsi:type="tinyint" nullable="false" default="0" comment="Is sent to Omnisend"/>
+        <index referenceId="NEWSLETTER_SUBSCRIBER_OMNISEND_IS_IMPORTED" indexType="btree">
             <column name="is_imported"/>
             <column name="store_id"/>
         </index>

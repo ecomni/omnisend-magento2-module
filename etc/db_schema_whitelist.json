@@ -76,5 +76,13 @@
         "index": {
             "SALES_ORDER_IS_IMPORTED_STORE_ID": true
         }
+    },
+    "newsletter_subscriber": {
+        "column": {
+            "is_imported": true
+        },
+        "index": {
+            "NEWSLETTER_SUBSCRIBER_IS_IMPORTED_STORE_ID": true
+        }
     }
 }

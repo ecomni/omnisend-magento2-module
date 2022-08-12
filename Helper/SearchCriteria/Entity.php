@@ -42,8 +42,8 @@ class Entity implements EntityInterface
     public function getEntityInStoreByImportStatusSearchCriteria($isImported, $storeId): SearchCriteriaBuilder
     {
         return $this->searchCriteriaBuilder
-            ->addFilter(InstallData::IS_IMPORTED, 'eq', $isImported)
-            ->addFilter('store_id', 'eq', $storeId)
+            ->addFilter(InstallData::IS_IMPORTED, $isImported)
+            ->addFilter('store_id', $storeId)
             ->addSortOrder(
                 $this->sortOrderBuilder
                     ->setField('entity_id')

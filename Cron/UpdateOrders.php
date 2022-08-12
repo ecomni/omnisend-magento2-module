@@ -82,7 +82,7 @@ class UpdateOrders
         $this->sortOrderBuilder = $sortOrderBuilder;
     }
 
-    public function execute()
+    public function execute(?\Magento\Cron\Model\Schedule $schedule = null)
     {
         if (!$this->generalConfig->getIsCronSynchronizationEnabled()) {
             return;
@@ -103,9 +103,24 @@ class UpdateOrders
                 ->getList($searchCriteria)
                 ->getItems();
 
+            if ($schedule) {
+                $schedule->setMessages(
+                    $schedule->getMessages()
+                    . sprintf('- Found %d orders for store %d', count($orders), $store->getId())
+                    . "\n"
+                );
+            }
+
             if (!$this->sendOrders($orders, $storeId)) {
+                if ($schedule) {
+                    $schedule->setMessages($schedule->getMessages() . '- Rate limit hit' . "\n");
+                }
                 return;
             }
+        }
+
+        if ($schedule && !empty($orders)) {
+            $schedule->setMessages($schedule->getMessages() . '- Done' . "\n");
         }
     }
 

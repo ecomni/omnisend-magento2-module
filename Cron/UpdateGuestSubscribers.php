@@ -87,7 +87,7 @@ class UpdateGuestSubscribers
         $this->subscriberAttributeUpdater = $subscriberAttributeUpdater;
     }
 
-    public function execute()
+    public function execute(?\Magento\Cron\Model\Schedule $schedule = null)
     {
         if (!$this->generalConfig->getIsCronSynchronizationEnabled()) {
             return;
@@ -105,8 +105,23 @@ class UpdateGuestSubscribers
 
             $subscribers = $collection->getItems();
 
+            if ($schedule) {
+                $schedule->setMessages(
+                    $schedule->getMessages()
+                    . sprintf('- Found %d subscribers for store %d', count($subscribers), $storeId)
+                    . "\n"
+                );
+            }
+
             if (!$this->sendSubscribers($subscribers, $storeId)) {
+                if ($schedule) {
+                    $schedule->setMessages($schedule->getMessages() . '- Rate limit hit' . "\n");
+                }
                 return;
+            }
+
+            if ($schedule && !empty($subscribers)) {
+                $schedule->setMessages($schedule->getMessages() . '- Done' . "\n");
             }
         }
     }

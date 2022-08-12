@@ -105,7 +105,7 @@ class UpdateCategories
     /**
      * @throws Exception
      */
-    public function execute()
+    public function execute(?\Magento\Cron\Model\Schedule $schedule = null)
     {
         if (!$this->generalConfig->getIsCronSynchronizationEnabled()) {
             return;
@@ -125,8 +125,23 @@ class UpdateCategories
             /** @var CategoryInterface[] $categories */
             $categories = $collection->getItems();
 
+            if ($schedule) {
+                $schedule->setMessages(
+                    $schedule->getMessages()
+                    . sprintf('- Found %d categories for store %d', count($categories), $storeId)
+                    . "\n"
+                );
+            }
+
             if (!$this->sendCategories($categories, $storeId)) {
+                if ($schedule) {
+                    $schedule->setMessages($schedule->getMessages() . '- Rate limit hit' . "\n");
+                }
                 return;
+            }
+
+            if ($schedule && !empty($categories)) {
+                $schedule->setMessages($schedule->getMessages() . '- Done' . "\n");
             }
         }
     }

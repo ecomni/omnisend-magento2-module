@@ -98,7 +98,7 @@ class UpdateCustomers
     /**
      * @throws LocalizedException
      */
-    public function execute()
+    public function execute(?\Magento\Cron\Model\Schedule $schedule = null)
     {
         if (!$this->generalConfig->getIsCronSynchronizationEnabled()) {
             return;
@@ -119,8 +119,23 @@ class UpdateCustomers
                 ->getList($searchCriteria)
                 ->getItems();
 
+            if ($schedule) {
+                $schedule->setMessages(
+                    $schedule->getMessages()
+                    . sprintf('- Found %d customers for store %d', count($customers), $store->getId())
+                    . "\n"
+                );
+            }
+
             if (!$this->sendCustomers($customers, $storeId)) {
+                if ($schedule) {
+                    $schedule->setMessages($schedule->getMessages() . '- Rate limit hit' . "\n");
+                }
                 return;
+            }
+
+            if ($schedule && !empty($customers)) {
+                $schedule->setMessages($schedule->getMessages() . '- Done' . "\n");
             }
         }
     }

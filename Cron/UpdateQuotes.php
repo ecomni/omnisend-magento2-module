@@ -84,7 +84,7 @@ class UpdateQuotes
         $this->importStatus = $importStatus;
     }
 
-    public function execute()
+    public function execute(?\Magento\Cron\Model\Schedule $schedule = null)
     {
         if (!$this->generalConfig->getIsCronSynchronizationEnabled()) {
             return;
@@ -105,8 +105,23 @@ class UpdateQuotes
                 ->getList($searchCriteria)
                 ->getItems();
 
+            if ($schedule) {
+                $schedule->setMessages(
+                    $schedule->getMessages()
+                    . sprintf('- Found %d quotes for store %d', count($quotes), $storeId)
+                    . "\n"
+                );
+            }
+
             if (!$this->sendQuotes($quotes, $storeId)) {
+                if ($schedule) {
+                    $schedule->setMessages($schedule->getMessages() . '- Rate limit hit' . "\n");
+                }
                 return;
+            }
+
+            if ($schedule && !empty($quotes)) {
+                $schedule->setMessages($schedule->getMessages() . '- Done' . "\n");
             }
         }
     }

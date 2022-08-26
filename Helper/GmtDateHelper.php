@@ -14,7 +14,10 @@ class GmtDateHelper
      */
     public function getGmtDate($dateString = null)
     {
-        $date = new DateTime($dateString);
+        if (!$dateString) {
+            $dateString = 'now';
+        }
+        $date = new \DateTime($dateString);
 
         return $date->format(self::ISO_FORMAT_STRING);
     }

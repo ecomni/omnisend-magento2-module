@@ -17,6 +17,7 @@ class GeneralConfig
     const FIELD_IS_CRON_SYNCHRONIZATION_ENABLED = 'is_cron_synchronization_enabled';
     const FIELD_IS_REAL_TIME_SYNCHRONIZATION_ENABLED = 'is_real_time_synchronization_enabled';
     const FIELD_MAXIMUM_ENTITIES_PER_CRON = 'maximum_entities_per_cron';
+    const FIELD_MAXIMUM_SECONDS_PER_CRON = 'maximum_seconds_per_cron';
     const FIELD_OMNISEND_URL = 'omnisend_url';
     const FIELD_INSTRUCTIONS_URL = 'instructions_url';
     const FIELD_IS_VERIFIED = 'is_verified';
@@ -91,6 +92,17 @@ class GeneralConfig
     {
         return $this->scopeConfig->getValue(
             self::SECTION_OMNISEND_CONFIG . self::GROUP_GENERAL . self::FIELD_MAXIMUM_ENTITIES_PER_CRON,
+            ScopeInterface::SCOPE_STORE
+        );
+    }
+
+    /**
+     * @return int
+     */
+    public function getMaximumSecondsPerCron()
+    {
+        return $this->scopeConfig->getValue(
+            self::SECTION_OMNISEND_CONFIG . self::GROUP_GENERAL . self::FIELD_MAXIMUM_SECONDS_PER_CRON,
             ScopeInterface::SCOPE_STORE
         );
     }

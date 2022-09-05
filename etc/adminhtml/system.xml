@@ -36,6 +36,9 @@
                 <field id="maximum_entities_per_cron" translate="label" type="text" sortOrder="70" showInDefault="1" showInWebsite="0" showInStore="0">
                     <label>Maximum entities loaded per cron job</label>
                 </field>
+                <field id="maximum_seconds_per_cron" translate="label" type="text" sortOrder="80" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Maximum seconds to run per cron job</label>
+                </field>
                 <field id="request_log_cleanup_days" translate="label" type="text" sortOrder="100" showInDefault="1" showInWebsite="0" showInStore="0">
                     <label>Clean request log older than (days, 0 to disable)</label>
                 </field>

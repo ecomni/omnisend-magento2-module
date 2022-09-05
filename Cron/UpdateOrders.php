@@ -6,6 +6,9 @@ use Magento\Framework\Api\SortOrderBuilder;
 use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Api\OrderRepositoryInterface;
 use Magento\Store\Model\StoreManagerInterface;
+use Omnisend\Omnisend\Exception\RateLimitHitException;
+use Omnisend\Omnisend\Exception\SynchronizationException;
+use Omnisend\Omnisend\Exception\TimeLimitExceededException;
 use Omnisend\Omnisend\Helper\SearchCriteria\EntityInterface as EntitySearchCriteriaInterface;
 use Omnisend\Omnisend\Model\Attribute\IsImported\AttributeUpdaterInterface;
 use Omnisend\Omnisend\Model\Attribute\IsImported\ImportStatus;
@@ -112,9 +115,11 @@ class UpdateOrders
                 );
             }
 
-            if (!$this->sendOrders($orders, $storeId)) {
+            try {
+                $this->sendOrders($orders, $storeId);
+            } catch (SynchronizationException $exception) {
                 if ($schedule) {
-                    $schedule->setMessages($schedule->getMessages() . '- Rate limit hit' . "\n");
+                    $schedule->setMessages($schedule->getMessages() . '- ' . $exception->getMessage() . "\n");
                 }
                 return;
             }
@@ -131,12 +136,17 @@ class UpdateOrders
      * @param OrderInterface[] $orders
      * @param $storeId
      * @return bool
+     * @throws SynchronizationException
      */
     public function sendOrders($orders, $storeId)
     {
+        $startTime = microtime(true);
         foreach ($orders as $order) {
             if (!$this->responseRateManager->check($storeId)) {
-                return false;
+                throw new RateLimitHitException();
+            }
+            if (microtime(true) - $startTime > $this->generalConfig->getMaximumSecondsPerCron()) {
+                throw new TimeLimitExceededException();
             }
 
             $this->processOrder($order);

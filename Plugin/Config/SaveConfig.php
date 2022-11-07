@@ -61,18 +61,16 @@ class SaveConfig
         $this->request = $request;
     }
 
-
     public function afterSave(Config $subject, $result)
     {
-
         //Get first three digits of version to decide if code should be executed
-        $version = floatval(substr($this->productMetadata->getVersion(), 0, 3));
+        $version = $this->productMetadata->getVersion();
 
         $configData = $subject->getData();
         $configData['store'] = $this->storeManager->getStore()->getId();
         $configData['website'] = $this->storeManager->getStore()->getWebsiteId();
 
-        if ($version < 2.3) {
+        if (version_compare($version, '2.3', '<')) {
             $this->eventManager->dispatch(
                 'admin_system_config_save',
                 ['configData' => $configData, 'request' => $this->request]

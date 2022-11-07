@@ -14,6 +14,7 @@ interface OmnisendRequestInterface
     const RESPONSE_BODY = 'response_body';
     const CREATED_AT = 'created_at';
     const HASH = 'hash';
+    const EXECUTION_TIME = 'execution_time';
 
     /**
      * Get entity_id
@@ -124,4 +125,17 @@ interface OmnisendRequestInterface
      * @return \Omnisend\Omnisend\Api\Data\OmnisendRequestInterface
      */
     public function setHash(?string $hash): OmnisendRequestInterface;
+
+    /**
+     * Get execution time
+     * @return int|null
+     */
+    public function getExecutionTime(): ?int;
+
+    /**
+     * Set execution time
+     * @param int|null $executionTime
+     * @return \Omnisend\Omnisend\Api\Data\OmnisendRequestInterface
+     */
+    public function setExecutiontime(?int $executionTime): OmnisendRequestInterface;
 }

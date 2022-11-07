@@ -162,4 +162,22 @@ class OmnisendRequest extends AbstractModel implements OmnisendRequestInterface
     {
         return $this->setData(self::HASH, $hash);
     }
+
+    /**
+     * @inheritDoc
+     */
+    public function getExecutionTime(): ?int
+    {
+        return $this->getData(self::EXECUTION_TIME) !== null
+            ? (int)$this->getData(self::EXECUTION_TIME)
+            : null;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function setExecutionTime(?int $executionTime): OmnisendRequestInterface
+    {
+        return $this->setData(self::EXECUTION_TIME, $executionTime);
+    }
 }

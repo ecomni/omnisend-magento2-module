@@ -62,6 +62,7 @@ see: https://devdocs.magento.com/guides/v2.4/extension-dev-guide/declarative-sch
         <column name="request_method" xsi:type="varchar" length="16" nullable="true" comment="Request Method"/>
         <column name="request_body" xsi:type="text" nullable="true" comment="Request Body"/>
         <column name="hash" xsi:type="varchar" length="16" nullable="true" comment="Request Hash"/>
+        <column name="execution_time" xsi:type="smallint" unsigned="true" nullable="true" comment="Execution time in msec"/>
         <column name="store_id" xsi:type="smallint" nullable="true" padding="10" unsigned="false" comment="Store ID"/>
         <column name="response_code" xsi:type="smallint" nullable="true" padding="10" unsigned="false" comment="Response Code"/>
         <column name="response_body" xsi:type="text" nullable="true" comment="Response Body"/>

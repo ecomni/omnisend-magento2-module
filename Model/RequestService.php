@@ -126,6 +126,7 @@ class RequestService implements RequestServiceInterface
      */
     public function call(RequestDataInterface $requestData, $entity = 'all')
     {
+        $startTime = microtime(true);
         if ($this->isDuplicateRequest($requestData)) {
             $this->logger->debug(
                 self::class . ":: Duplicate request: ",
@@ -191,6 +192,7 @@ class RequestService implements RequestServiceInterface
                 ->setResponseCode($httpCode)
                 ->setStoreId($requestData->getStoreId())
                 ->setHash($this->calculateRequestHashForRequestData($requestData))
+                ->setExecutiontime(floor((microtime(true) - $startTime) * 1000))
                 ->setResponseBody($responseBody);
             $this->omnisendRequestRepository->save($requestRecord);
 

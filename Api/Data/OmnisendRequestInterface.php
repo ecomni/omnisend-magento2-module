@@ -13,6 +13,7 @@ interface OmnisendRequestInterface
     const RESPONSE_CODE = 'response_code';
     const RESPONSE_BODY = 'response_body';
     const CREATED_AT = 'created_at';
+    const HASH = 'hash';
 
     /**
      * Get entity_id
@@ -110,4 +111,17 @@ interface OmnisendRequestInterface
      * @return string|null
      */
     public function getCreatedAt(): ?string;
+
+    /**
+     * Get hash
+     * @return string|null
+     */
+    public function getHash(): ?string;
+
+    /**
+     * Set hash
+     * @param string $hash
+     * @return \Omnisend\Omnisend\Api\Data\OmnisendRequestInterface
+     */
+    public function setHash(?string $hash): OmnisendRequestInterface;
 }

@@ -164,12 +164,12 @@ class RequestService implements RequestServiceInterface
             $httpCode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
             curl_close($curl);
 
-            list($responseHeader, $responseBody) = explode("\r\n\r\n", $responseData, 2);
+            [$responseHeader, $responseBody] = explode("\r\n\r\n", $responseData, 2);
             $this->logger->debug(self::class . " - Response Header: ", [$responseHeader]);
             $this->logger->debug(self::class . " - Response Body: ", [$responseBody]);
 
             if (strpos($responseHeader, "100 Continue") !== false) {
-                list($responseHeader, $responseBody) = explode("\r\n\r\n", $responseBody, 2);
+                [$responseHeader, $responseBody] = explode("\r\n\r\n", $responseBody, 2);
             }
 
             $this->responseRateManager->update($responseHeader, $requestData->getStoreId());
@@ -190,6 +190,7 @@ class RequestService implements RequestServiceInterface
                 ->setRequestBody($requestData->getBody())
                 ->setResponseCode($httpCode)
                 ->setStoreId($requestData->getStoreId())
+                ->setHash($this->calculateRequestHashForRequestData($requestData))
                 ->setResponseBody($responseBody);
             $this->omnisendRequestRepository->save($requestRecord);
 
@@ -214,53 +215,36 @@ class RequestService implements RequestServiceInterface
         return null;
     }
 
-    private function isDuplicateRequest(RequestDataInterface $requestData)
+    /**
+     * Calculate a hash for request data, used to find duplicate requests
+     *
+     * @param RequestDataInterface $requestData
+     * @return string
+     */
+    public function calculateRequestHashForRequestData(RequestDataInterface $requestData): string
+    {
+        return substr(sha1(json_encode([
+            (string)$requestData->getUrl(),
+            (string)$requestData->getBody(),
+            (string)$requestData->getType(),
+            (int)$requestData->getStoreId()
+        ])), 0, 16);
+    }
+
+    public function isDuplicateRequest(RequestDataInterface $requestData): bool
     {
         try {
-            $filterGroup1 = $this->filterGroupBuilder->addFilter(
-                $this->filterBuilder
-                    ->setField(OmnisendRequestInterface::REQUEST_URL)
-                    ->setValue($requestData->getUrl())
-                    ->setConditionType("eq")
-                    ->create()
-            )->create();
+            $searchCriteria = $this->searchCriteriaBuilder
+                ->addFilter(OmnisendRequestInterface::HASH, $this->calculateRequestHashForRequestData($requestData))
+                // Be a little more sure as we 'only' compared a hash of 16 chars. It doesn't affect the execution time.
+                ->addFilter(OmnisendRequestInterface::REQUEST_BODY, $requestData->getBody())
+                ->addFilter(OmnisendRequestInterface::REQUEST_URL, $requestData->getUrl())
+                ->addFilter(OmnisendRequestInterface::REQUEST_METHOD, $requestData->getType())
+                ->setPageSize(1)
+                ->create();
 
-            $filterGroup2 = $this->filterGroupBuilder->addFilter(
-                $this->filterBuilder
-                    ->setField(OmnisendRequestInterface::REQUEST_METHOD)
-                    ->setValue($requestData->getType())
-                    ->setConditionType("eq")
-                    ->create()
-            )->create();
-
-            $filterGroup3 = $this->filterGroupBuilder->addFilter(
-                $this->filterBuilder
-                    ->setField(OmnisendRequestInterface::REQUEST_BODY)
-                    ->setValue($requestData->getBody())
-                    ->setConditionType("eq")
-                    ->create()
-            )->create();
-
-            $filterGroup4 = $this->filterGroupBuilder->addFilter(
-                $this->filterBuilder
-                    ->setField(OmnisendRequestInterface::STORE_ID)
-                    ->setValue($requestData->getStoreId())
-                    ->setConditionType("eq")
-                    ->create()
-            )->create();
-
-            $searchCriteria = $this->searchCriteriaBuilder->setFilterGroups([
-                $filterGroup1,
-                $filterGroup2,
-                $filterGroup3,
-                $filterGroup4
-            ])->create();
-
-            $resultCount = $this->omnisendRequestRepository
-                ->getList($searchCriteria)
-                ->getTotalCount();
-
-            return $resultCount > 0 ? true : false;
+            $count = $this->omnisendRequestRepository->getList($searchCriteria)->getTotalCount();
+            return $count > 0;
         } catch (Exception $exception) {
             $this->logger->critical($exception->getMessage());
             return false;

@@ -144,4 +144,22 @@ class OmnisendRequest extends AbstractModel implements OmnisendRequestInterface
             ? (string)$this->getData(self::CREATED_AT)
             : null;
     }
+
+    /**
+     * @inheritDoc
+     */
+    public function getHash(): ?string
+    {
+        return $this->getData(self::HASH) !== null
+            ? (string)$this->getData(self::HASH)
+            : null;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function setHash(?string $hash): OmnisendRequestInterface
+    {
+        return $this->setData(self::HASH, $hash);
+    }
 }

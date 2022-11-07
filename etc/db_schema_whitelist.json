@@ -60,13 +60,15 @@
             "store_id": true,
             "response_code": true,
             "response_body": true,
-            "created_at": true
+            "created_at": true,
+            "hash": true
         },
         "constraint": {
             "PRIMARY": true
         },
         "index": {
-            "OMNISEND_REQUEST_CREATED_AT": true
+            "OMNISEND_REQUEST_CREATED_AT": true,
+            "OMNISEND_REQUEST_HASH": true
         }
     },
     "sales_order": {

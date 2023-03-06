@@ -187,6 +187,7 @@
     <type name="Magento\Framework\Console\CommandList">
         <arguments>
             <argument name="commands" xsi:type="array">
+                <item name="send_customer_omnisend" xsi:type="object">Omnisend\Omnisend\Console\Command\SendCustomerOmnisend</item>
                 <item name="reset_customer_import_flags" xsi:type="object">Omnisend\Omnisend\Console\Command\ResetCustomerImportFlags</item>
                 <item name="reset_subscriber_import_flags" xsi:type="object">Omnisend\Omnisend\Console\Command\ResetSubscriberImportFlags</item>
                 <item name="reset_order_import_flags" xsi:type="object">Omnisend\Omnisend\Console\Command\ResetOrderImportFlags</item>
@@ -215,5 +216,11 @@
     </type>
     <type name="Magento\Customer\Model\AccountManagement">
         <plugin name="accountManagementPlugin" type="Omnisend\Omnisend\Plugin\AccountManagementPlugin"/>
+    </type>
+    <type name="Omnisend\Omnisend\Console\Command\SendCustomerOmnisend">
+        <arguments>
+            <argument name="omnisendContactResource" xsi:type="object">Omnisend\Omnisend\Model\EntityDataSender\Customer\Proxy</argument>
+            <argument name="customerRepository" xsi:type="object">Magento\Customer\Api\CustomerRepositoryInterface\Proxy</argument>
+        </arguments>
     </type>
 </config>

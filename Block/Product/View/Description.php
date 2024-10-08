@@ -12,9 +12,12 @@ use Magento\Framework\View\Element\Template\Context;
 use Omnisend\Omnisend\Helper\PriceHelper;
 use Omnisend\Omnisend\Helper\ProductImageHelper;
 use Omnisend\Omnisend\Helper\ProductUrlHelper;
+use Omnisend\Omnisend\Model\Config\GeneralConfig;
 
 class Description extends BaseDescription
 {
+    protected GeneralConfig $generalConfig;
+
     /**
      * @var PriceCurrencyInterface
      */
@@ -59,6 +62,7 @@ class Description extends BaseDescription
         ProductImageHelper $productImageHelper,
         ProductUrlHelper $productUrlHelper,
         JsonHelper $jsonHelper,
+        GeneralConfig $generalConfig,
         array $data = []
     ) {
         $this->priceCurrency = $priceCurrency;
@@ -66,6 +70,7 @@ class Description extends BaseDescription
         $this->productImageHelper = $productImageHelper;
         $this->productUrlHelper = $productUrlHelper;
         $this->jsonHelper = $jsonHelper;
+        $this->generalConfig = $generalConfig;
 
         parent::__construct($context, $registry, $data);
     }
@@ -215,5 +220,18 @@ class Description extends BaseDescription
     protected function getTags()
     {
         return [];
+    }
+
+    /**
+     * Return empty output when API key is empty
+     *
+     * @return string
+     */
+    protected function _toHtml()
+    {
+        if (!$this->generalConfig->getApiKey(null)) {
+            return '';
+        }
+        return parent::_toHtml();
     }
 }

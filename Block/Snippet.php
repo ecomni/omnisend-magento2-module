@@ -66,4 +66,17 @@ class Snippet extends Template
             return '';
         }
     }
+
+    /**
+     * Return empty output when API key is empty
+     *
+     * @return string
+     */
+    protected function _toHtml()
+    {
+        if (!$this->getAccountId()) {
+            return '<!-- No Omnisend account id specified -->';
+        }
+        return parent::_toHtml();
+    }
 }
